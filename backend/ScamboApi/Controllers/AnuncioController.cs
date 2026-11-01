@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScamboApi.Models;
 namespace ScamboApi.Controllers;
@@ -6,8 +7,7 @@ namespace ScamboApi.Controllers;
 [Route("api/[controller]")]
 public class AnuncioController : ControllerBase
 {
-    // TODO(front): a tela /app/products já consome este endpoint. Deve retornar um array de
-    // anúncios (hoje retorna texto). Formato em docs/CONTRATO_API.md, seção "GET api/anuncio".
+    [Authorize]
     [HttpGet]
     public IActionResult ObterTodos()
     {

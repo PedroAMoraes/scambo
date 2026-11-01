@@ -1,6 +1,9 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScamboApi.DTOs;
 using ScamboApi.Models;
+using ScamboApi.Services;
 namespace ScamboApi.Controllers;
 
 [ApiController]
@@ -8,9 +11,11 @@ namespace ScamboApi.Controllers;
 public class UsuariosController : ControllerBase
 {
     private readonly ScamboContext _db;
-    public UsuariosController(ScamboContext db)
+    private readonly IAuthService _auth;
+    public UsuariosController(ScamboContext db, IAuthService auth)
     {
         _db = db;
+        _auth = auth;
     }
     // TODO(front): a sidebar e a tela /app/profile esperam GET api/usuarios/me,
     // GET api/usuarios/me/perfil e PATCH api/usuarios/me (dependem da autenticação).
@@ -31,9 +36,7 @@ public class UsuariosController : ControllerBase
     [HttpPost]
     public IActionResult CriarUsuario([FromBody] UsuarioRegistroDTO novoUsuario)
     {
-        Usuario usuario = new Usuario(novoUsuario);
-        _db.Usuarios.Add(usuario);
-        _db.SaveChanges();
+       _auth.CadastrarUsuario(novoUsuario);
         return Created("", novoUsuario);
     }
     [HttpPut("{id}")]
@@ -45,5 +48,12 @@ public class UsuariosController : ControllerBase
     public IActionResult ExcluirUsuario(int id)
     {
         return NoContent();
+    }
+    [Authorize]
+    [HttpGet("eu")]
+    public IActionResult MeuUsuario()
+    {
+        var user = User.Claims.Where(x => x.Type ==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+        return Ok(user);
     }
 }
