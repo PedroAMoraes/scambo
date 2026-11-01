@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScamboApi.Models;
 namespace ScamboApi.Controllers;
@@ -6,6 +7,7 @@ namespace ScamboApi.Controllers;
 [Route("api/[controller]")]
 public class AnuncioController : ControllerBase
 {
+    [Authorize]
     [HttpGet]
     public IActionResult ObterTodos()
     {

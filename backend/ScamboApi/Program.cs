@@ -19,6 +19,8 @@ builder.Services.AddScoped<IServicoArmazenamento>(provider =>
     BlobContainerClient blobClient = new BlobContainerClient(storageConnectionString,"imagens");
     return new ServicoArmazenamento(blobClient);
 });
+builder.Services.AddJwtConfig();
+builder.Services.AddScoped<IAuthService, AuthService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
