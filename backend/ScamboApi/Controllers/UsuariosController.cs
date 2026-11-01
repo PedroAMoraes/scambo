@@ -17,6 +17,9 @@ public class UsuariosController : ControllerBase
         _db = db;
         _auth = auth;
     }
+    // TODO(front): a sidebar e a tela /app/profile esperam GET api/usuarios/me,
+    // GET api/usuarios/me/perfil e PATCH api/usuarios/me (dependem da autenticação).
+    // Formatos em docs/CONTRATO_API.md; ordem sugerida em docs/GUIA_BACKEND.md.
     [HttpGet]
     public IActionResult ObterTodos()
     {
@@ -28,6 +31,8 @@ public class UsuariosController : ControllerBase
         return Ok($"Usuário com ID {id} encontrado");
     }
   
+    // TODO(front): cadastro. Retornar 201 sem a senha e erros 400/409; ver docs/CONTRATO_API.md,
+    // seção "POST api/usuarios". Observação: a senha está sendo salva sem hash.
     [HttpPost]
     public IActionResult CriarUsuario([FromBody] UsuarioRegistroDTO novoUsuario)
     {
