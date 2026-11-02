@@ -5,23 +5,12 @@ import PainelDesktop from "./PainelDesktop";
 import MobileHero from "./MobileHero";
 import Input from "../../components/Input/Input";
 import { IconeCadeado, IconeEmail } from "../../components/Icones/IconesInput";
-import SocialIcons from "./SocialIcons";
-import { type LoginState } from "./LoginState";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
-  const [loginState, setLoginState] = useState<LoginState>({email:"",senha:""});
-  
-  const handleChange = (e : React.ChangeEvent<HTMLInputElement>) =>{
-    const {name, value, type} = e.target;
-    setLoginState((dadosMantidos) => ({
-        ...dadosMantidos,
-        [name] : type === 'number' ? Number(value) : value
-    }))
-  }
-  const handleSubmit = () => {
-    console.log("Dados: ", loginState)
-  }
+  const {handleInput, handleLogin, error} = useAuth();
+
   return (
     <div className="login-page">
       {/* Auth layout container */}
@@ -39,8 +28,8 @@ export default function LoginScreen() {
               <h2 className="login-title">Bem-vindo de volta</h2>
               <p className="login-subtitle">Acesse sua conta para continuar</p>
             </div>
-            <Input titulo="E-mail" name="email" icone={<IconeEmail/>} placeholder="seu@email.com" value={loginState.email} onChange={handleChange}/>
-            <Input titulo="Senha" name="senha" icone={<IconeCadeado/>} placeholder="Digite sua senha" value={loginState.senha} onChange={handleChange}/>
+            <Input titulo="E-mail" name="email" icone={<IconeEmail/>} placeholder="seu@email.com"  onChange={handleInput}/>
+            <Input type="password" titulo="Senha" name="senha" icone={<IconeCadeado/>} placeholder="Digite sua senha"  onChange={handleInput}/>
 
             {/* Forgot password */}
             <div className="forgot-password">
@@ -51,12 +40,13 @@ export default function LoginScreen() {
             <button
               type="button"
               className="btn-primary"
-              onClick={handleSubmit}
+              onClick={handleLogin}
             >
               Entrar
             </button>
-            <SocialIcons/>
-
+            <p>
+              {error }
+            </p>
             {/* Register prompt */}
             <p className="register">
               Não tem conta?{' '}

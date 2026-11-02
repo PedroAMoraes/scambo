@@ -4,6 +4,7 @@ import useCarregarDados from "../../hooks/useCarregarDados";
 import { obterUsuarioLogado } from "../../services/usuario";
 import { IconeChat, IconeInicio, IconePerfil, IconeSair } from "./IconesSidebar";
 import styles from "./Sidebar.module.css";
+import { useAuth } from "../../hooks/useAuth";
 
 /*
  * Navegação das telas /app (fixa à esquerda no desktop, barra inferior no mobile).
@@ -30,7 +31,7 @@ export default function Sidebar() {
     const { estado } = useCarregarDados(obterUsuarioLogado);
     const usuario = estado.status === 'sucesso' ? estado.dados : null;
     const navigate = useNavigate();
-
+    const {logout} = useAuth()
     // TODO(back-end): com a autenticação definida, encerrar a sessão antes de navegar
     // (mesma regra do botão Sair da tela de Perfil).
     const sair = () => navigate("/login");
@@ -63,7 +64,7 @@ export default function Sidebar() {
                         {usuario && <p className={styles.usuarioId}>@{usuario.nomeUsuario}</p>}
                     </div>
                 </NavLink>
-                <button type="button" className={styles.botaoSair} onClick={sair} aria-label="Sair da conta" title="Sair">
+                <button type="button" className={styles.botaoSair} onClick={logout} aria-label="Sair da conta" title="Sair">
                     <IconeSair />
                 </button>
             </div>
