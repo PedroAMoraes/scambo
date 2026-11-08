@@ -29,6 +29,7 @@ public class AuthService : IAuthService
     {
         Usuario novoUsuario = new Usuario(usuario);
         HashPassword(novoUsuario);
+        if(_db.Usuarios.Any(u => u.Email == usuario.Email)) throw new Exception("E-mail já cadastrado");
         _db.Usuarios.Add(novoUsuario);
         _db.SaveChanges();
         return AutenticarUsuario(new UsuarioLoginDTO{Email = usuario.Email, Senha = usuario.Senha});

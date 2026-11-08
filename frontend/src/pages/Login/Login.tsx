@@ -6,10 +6,11 @@ import MobileHero from "./MobileHero";
 import Input from "../../components/Input/Input";
 import { IconeCadeado, IconeEmail } from "../../components/Icones/IconesInput";
 import { useAuth } from "../../hooks/useAuth";
+import Botao from "../../components/Botao";
 
 export default function LoginScreen() {
   const navigate = useNavigate();
-  const {handleInput, handleLogin, error} = useAuth();
+  const {handleInput, handleLogin, error, isLoading} = useAuth();
 
   return (
     <div className="login-page">
@@ -37,20 +38,21 @@ export default function LoginScreen() {
                 Esqueci minha senha
               </button>
             </div>
-            <button
+            <Botao
               type="button"
               className="btn-primary"
               onClick={handleLogin}
+              carregando={isLoading}
             >
               Entrar
-            </button>
+            </Botao>
             <p>
               {error }
             </p>
             {/* Register prompt */}
             <p className="register">
               Não tem conta?{' '}
-              <button type="button" onClick={() => navigate("/register")}>Cadastre-se</button>
+              <button type="button" onClick={() => navigate("/cadastro")}>Cadastre-se</button>
             </p>
           </div>
         </div>

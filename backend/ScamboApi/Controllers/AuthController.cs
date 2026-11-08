@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ScamboApi.DTOs;
 using ScamboApi.Services;
@@ -30,8 +31,14 @@ namespace ScamboApi.Controllers
         [HttpPost("cadastro")]
         public IActionResult CriarUsuario([FromBody] UsuarioRegistroDTO novoUsuario)
         {
-            _auth.CadastrarUsuario(novoUsuario);
-            return Created("", novoUsuario);
+            try{
+            string token = _auth.CadastrarUsuario(novoUsuario);
+            return Created("",new {token = token});
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new {message = e.Message});
+            }
         }
     }
 }
