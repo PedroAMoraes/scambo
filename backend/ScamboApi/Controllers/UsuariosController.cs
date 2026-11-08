@@ -20,12 +20,7 @@ public class UsuariosController : ControllerBase
     // TODO(front): a sidebar e a tela /app/profile esperam GET api/usuarios/me,
     // GET api/usuarios/me/perfil e PATCH api/usuarios/me (dependem da autenticação).
     // Formatos em docs/CONTRATO_API.md; ordem sugerida em docs/GUIA_BACKEND.md.
-    [HttpGet]
-    public IActionResult ObterTodos()
-    {
-        return Ok("Lista de usuários cadastrados");
-    }
-    [HttpGet("{id}")]
+    [HttpGet("/find/{id}")]
     public IActionResult ObterPorId(int id)
     {
         return Ok($"Usuário com ID {id} encontrado");
@@ -33,12 +28,6 @@ public class UsuariosController : ControllerBase
   
     // TODO(front): cadastro. Retornar 201 sem a senha e erros 400/409; ver docs/CONTRATO_API.md,
     // seção "POST api/usuarios". Observação: a senha está sendo salva sem hash.
-    [HttpPost]
-    public IActionResult CriarUsuario([FromBody] UsuarioRegistroDTO novoUsuario)
-    {
-       _auth.CadastrarUsuario(novoUsuario);
-        return Created("", novoUsuario);
-    }
     [HttpPut("{id}")]
     public IActionResult AtualizarUsuario(int id, [FromBody] Usuario usuarioAtualizado)
     {
@@ -50,10 +39,12 @@ public class UsuariosController : ControllerBase
         return NoContent();
     }
     [Authorize]
-    [HttpGet("eu")]
+    [HttpGet]
     public IActionResult MeuUsuario()
     {
         var user = User.Claims.Where(x => x.Type ==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-        return Ok(user);
+        Usuario usuario = _db.Usuarios.FirstOrDefault(u => u.Email == user);
+        usuario.Senha = "";
+        return Ok(usuario);
     }
 }

@@ -113,7 +113,7 @@ namespace ScamboApi.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("double");
@@ -134,6 +134,9 @@ namespace ScamboApi.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });

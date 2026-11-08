@@ -1,15 +1,10 @@
+import type { ReactElement } from "react";
 import { cores, fontes } from "../lib/pallete";
-
-export function InputField({
-  label, type = "text", placeholder, value, onChange, icon,
-}: {
-  label: string; 
-  type?: string; 
-  placeholder: string; 
-  value: string;
-  onChange: (v: string) => void; 
-  icon?: React.ReactNode;
-  }) {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement>{
+    label : string,
+    icon?: ReactElement  
+}
+export function InputField({label, icon, ...rest}:  InputProps) {
 
   
   return (
@@ -24,10 +19,7 @@ export function InputField({
           </div>
         )}
         <input
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          onChange={(e) => {onChange(e.target.value)}}
+        {...rest}
           style={{
             fontFamily: fontes.sans,
             fontSize: 14,

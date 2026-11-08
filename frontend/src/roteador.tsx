@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router"
+import { createBrowserRouter, redirect } from "react-router"
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Cadastro from "./pages/Cadastro/Cadastro";
@@ -8,23 +8,30 @@ import Produtos from "./pages/Produtos/Produtos";
 import LayoutApp from "./components/LayoutApp/LayoutApp";
 import Perfil from "./pages/Perfil/Perfil";
 import Conversas from "./pages/Conversas/Conversas";
+import { useAuth } from "./hooks/useAuth";
+import { checkAuth } from "./utils/isAuth";
 
 export const roteador = createBrowserRouter([
     {
         path:"/login",
+        middleware: [guestMiddleware],
         element: <Login/>
     },
     {
         path:"/cadastro",
+        middleware: [guestMiddleware],
         element: <Cadastro/>
     },
     {
         path:"chat",
+        middleware:[authMiddleware],
         element: <Chat/>
     },
     {
         path: "app",
+        middleware: [authMiddleware],
         element: <LayoutApp/>,
+        
         children:[
             {path:"products",
                 element: <Produtos/>
@@ -38,3 +45,15 @@ export const roteador = createBrowserRouter([
         ]
     }
 ]);
+
+async function guestMiddleware(){
+    
+    if(checkAuth()){
+        throw redirect('/app')
+    }
+    
+}
+
+async function authMiddleware(){
+    if(!checkAuth()) throw redirect('/login')
+}

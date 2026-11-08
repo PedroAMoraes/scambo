@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using ScamboApi.DTOs;
 
 namespace ScamboApi.Models
 {
+    [Index(nameof(Email), IsUnique = true)]
     public class Usuario
     {
         public int Id { get; set; }
         public string Nome { get; set; }
+        [Required]
         public string Email { get; set; }
         public string Senha { get; set; }
         //public List<string> FotoPerfilUrl { get; set; }
